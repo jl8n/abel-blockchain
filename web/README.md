@@ -1,6 +1,6 @@
-# Abel Blockchain (abel-blockchain)
+# Abel Tracker (abel-tracker)
 
-Tracking Abel stats via blockchain
+Track Abel stats
 
 ## Install the dependencies
 ```bash

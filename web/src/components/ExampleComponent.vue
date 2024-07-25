@@ -1,37 +1,26 @@
+<script setup lang="ts">
+
+const props = defineProps<{
+  value?: number
+  stat?: string
+  color?: string
+}>()
+
+</script>
+
 <template>
-  <div>
-    <p>{{ title }}</p>
-    <ul>
-      <li v-for="todo in todos" :key="todo.id" @click="increment">
-        {{ todo.id }} - {{ todo.content }}
-      </li>
-    </ul>
-    <p>Count: {{ todoCount }} / {{ meta.totalCount }}</p>
-    <p>Active: {{ active ? 'yes' : 'no' }}</p>
-    <p>Clicks on todos: {{ clickCount }}</p>
-  </div>
+  <q-card>
+    <q-card-section class="text-white column items-center q-gutter-lg q-pa-lg" :class="'bg-' + color">
+      <div class="text-h1">{{ props.value }}</div>
+      <div class="text-subtitle2">{{ props.stat }}</div>
+    </q-card-section>
+  </q-card>
 </template>
 
-<script setup lang="ts">
-import { computed, ref } from 'vue'
-import { Todo, Meta } from './models'
-
-interface Props {
-  title: string;
-  todos?: Todo[];
-  meta: Meta;
-  active: boolean;
-};
-
-const props = withDefaults(defineProps<Props>(), {
-  todos: () => []
-})
-
-const clickCount = ref(0)
-function increment () {
-  clickCount.value += 1
-  return clickCount.value
+<style lang="scss" scoped>
+// TODO: move to global style to override quasar styles properly
+.text-h1 {
+  font-size: 5.5em;
+  margin: 0;
 }
-
-const todoCount = computed(() => props.todos.length)
-</script>
+</style>

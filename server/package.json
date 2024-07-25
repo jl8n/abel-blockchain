@@ -4,16 +4,20 @@
     "description": "Blockchain Tracker API",
     "main": "index.js",
     "type": "module",
+    "license": "GPL-3.0-only",
     "scripts": {
-        "start": "node index.js",
-        "build": "./node_modules/.bin/esbuild src/index.ts --bundle --platform=node --outfile=dist/index.js --format=esm",
+        "foo": "tsc -p tsconfig.json",
+        "start": "node dist/index.js",
+        "build": "esbuild src/index.ts --bundle --platform=node --outfile=dist/index.js --format=esm",
+        "dev": "esbuild src/index.ts --bundle --platform=node --outfile=dist/index.js --format=esm && node dist/index.js"
     },
     "dependencies": {
+        "esbuild": "^0.22.0",
         "fastify": "^4.28.1"
     },
     "devDependencies": {
         "@eslint/js": "^9.6.0",
-        "esbuild": "^0.22.0",
+        "@types/node": "^20.14.9",
         "eslint": "9.x",
         "globals": "^15.7.0",
         "typescript-eslint": "^7.14.1"
