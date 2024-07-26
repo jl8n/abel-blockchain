@@ -15,6 +15,13 @@
           Abel's Kicks
         </q-toolbar-title>
 
+        <q-btn
+          flat
+          dense
+          round
+          icon="edit"
+          aria-label="More"
+          @click="isLoginDialogOpen = true"/>
         <div>Quasar v{{ $q.version }}</div>
       </q-toolbar>
     </q-header>
@@ -42,17 +49,21 @@
     <q-page-container>
       <router-view />
     </q-page-container>
+
+    <LoginDialog :visible="isLoginDialogOpen"/>
   </q-layout>
 </template>
 
 <script setup lang="ts">
 import { ref } from 'vue'
 import EssentialLink, { EssentialLinkProps } from 'components/EssentialLink.vue'
+import LoginDialog from 'components/LoginDialog.vue'
 
 defineOptions({
   name: 'MainLayout'
 })
 
+const isLoginDialogOpen = ref(false)
 const linksList: EssentialLinkProps[] = [
   {
     title: 'Docs',

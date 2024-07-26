@@ -12,6 +12,7 @@
         "dev": "esbuild src/index.ts --bundle --platform=node --outfile=dist/index.js --format=esm && node dist/index.js"
     },
     "dependencies": {
+        "@fastify/cors": "^9.0.1",
         "esbuild": "^0.22.0",
         "fastify": "^4.28.1"
     },

@@ -9,12 +9,10 @@ const props = defineProps<{
 </script>
 
 <template>
-  <q-card>
-    <q-card-section class="text-white column items-center q-gutter-lg q-pa-lg" :class="'bg-' + color">
-      <div class="text-h1">{{ props.value }}</div>
-      <div class="text-subtitle2">{{ props.stat }}</div>
-    </q-card-section>
-  </q-card>
+  <div class="column items-center">
+    <div class="text-h1">{{ props.value }}</div>
+    <div class="text-subtitle2">{{ props.stat }}</div>
+  </div>
 </template>
 
 <style lang="scss" scoped>
