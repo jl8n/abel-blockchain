@@ -1,9 +1,11 @@
-# Build stage
+# ===== Build stage =====
 FROM node:20-alpine3.18 AS builder
 WORKDIR /app
 
-# Copy package.json and yarn.lock files
+# Copy root files (necessary because of yarn workspaces)
 COPY package.json yarn.lock shared-types.ts ./
+
+# Copy /server package.json
 COPY server/package.json ./server/
 
 # Install all dependencies
@@ -16,13 +18,23 @@ COPY server ./server
 WORKDIR /app/server
 RUN yarn build
 
-# Production stage
+
+# ===== Production stage =====
 FROM node:20-alpine3.18
 WORKDIR /app
 
-# Copy package.json files (needed for module resolution)
+# Copy root package.json (necessary because of yarn workspaces)
 COPY package.json ./
-COPY server/package.json server/mark.json ./server/
+
+# Copy /server package.json
+COPY server/package.json ./server/
+
+# Use local mark.json if it exists, otherwise use the GitHub secret
+ARG MARK_JSON_CONTENT
+COPY server/mark.json ./server/mark.json
+RUN if [ ! -f ./server/mark.json ]; then \
+      echo "$MARK_JSON_CONTENT" > ./server/mark.json; \
+    fi
 
 # Install only production dependencies
 RUN yarn install --production --frozen-lockfile && \
@@ -31,7 +43,7 @@ RUN yarn install --production --frozen-lockfile && \
 # Copy built assets from the builder stage
 COPY --from=builder /app/server/dist ./server/dist
 
-
+# Finalize
 WORKDIR /app/server
 EXPOSE 3000
 CMD ["node", "dist/index.js"]
