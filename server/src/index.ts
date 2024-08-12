@@ -10,8 +10,8 @@ const fastify = Fastify({
 
 fastify.register(routes);
 fastify.register(cors, {
-  origin: true, // You can also specify a specific origin like 'http://localhost:8080'
-  methods: ['GET', 'POST', 'PUT', 'DELETE'], // Specify the methods you want to allow
+  origin: true,
+  methods: ['GET', 'POST', 'PUT', 'DELETE'],
 });
 
 

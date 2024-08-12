@@ -1,1 +1,46 @@
 // app global css in SCSS form
+
+@font-face {
+  font-family: 'Rhyder';
+  src: url('~@/assets/fonts/Rhyder.woff2') format('woff2');
+  font-weight: normal;
+  font-style: normal;
+}
+
+.title {
+  font-family: 'Rhyder', sans-serif;
+  font-weight: 700;
+  background-image: -webkit-linear-gradient(0deg, #e37fa0 0%, #9728a6 100%);
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.gradient-border {
+  border: 4px solid; /* Adjust the width of the border as needed */
+  border-image: -webkit-linear-gradient(0deg, #e37fa0 0%, #9728a6 100%);
+  border-image-slice: 1;
+  border-radius: 8px; /* Optional: Adds rounded corners */
+}
+
+.container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh; /* Full height to center the block vertically */
+}
+
+// body {
+//   background: rgb(72,23,80);
+//   background: linear-gradient(135deg, rgba(72,23,80,1) 16%, rgba(16,12,48,1) 100%);
+// }
+
+.q-page-container {
+  min-height: 100vh; /* Ensure the q-page fills the viewport */
+  position: relative; /* Allows the header to float above */
+}
+
+.q-page {
+  background-color: #121212; /* Example: dark background color */
+  padding-top: 64px; /* Account for the height of the header */
+}

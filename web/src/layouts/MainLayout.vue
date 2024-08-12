@@ -1,18 +1,55 @@
+<script setup lang="ts">
+import { ref, onMounted } from 'vue'
+import { useUserStore } from 'stores/userStore'
+import { Metric } from '../../../shared-types'
+
+const userStore = useUserStore()
+
+const alert = ref(false)
+const password = ref('')
+const authenticated = ref(false)
+const localMetrics = ref<Metric[]>([])
+const loading = ref(true)
+
+onMounted(async () => {
+  await fetchInitialData()
+})
+
+async function fetchInitialData () {
+  loading.value = true
+  const success = await userStore.fetchMetrics()
+  if (success) {
+    // Initialize local metrics with a deep copy of store metrics
+    localMetrics.value = JSON.parse(JSON.stringify(userStore.metrics))
+    console.log('fetched data', localMetrics.value)
+  } else {
+    console.error('Failed to fetch initial data')
+  }
+  loading.value = false
+}
+
+async function saveMetrics () {
+  const success = await userStore.updateMetrics(localMetrics.value)
+  if (success) {
+    console.log('Metrics updated successfully')
+    // Refresh localMetrics from the store
+    localMetrics.value = JSON.parse(JSON.stringify(userStore.metrics))
+  } else {
+    console.error('Failed to update metrics')
+    // Revert localMetrics to the store state
+    localMetrics.value = JSON.parse(JSON.stringify(userStore.metrics))
+  }
+}
+
+</script>
+
 <template>
   <q-layout view="lHh Lpr lFf">
-    <q-header elevated>
+    <q-header class="bg-dark" >
       <q-toolbar>
-        <q-btn
-          flat
-          dense
-          round
-          icon="menu"
-          aria-label="Menu"
-          @click="toggleLeftDrawer"
-        />
 
         <q-toolbar-title>
-          Abel's Kicks
+          <!-- leave empty for page formatting -->
         </q-toolbar-title>
 
         <q-btn
@@ -21,97 +58,54 @@
           round
           icon="edit"
           aria-label="More"
-          @click="isLoginDialogOpen = true"/>
-        <div>Quasar v{{ $q.version }}</div>
+          @click="alert = true"
+          style="color: #ffffff75"/>
       </q-toolbar>
     </q-header>
-
-    <q-drawer
-      v-model="leftDrawerOpen"
-      show-if-above
-      bordered
-    >
-      <q-list>
-        <q-item-label
-          header
-        >
-          Essential Links
-        </q-item-label>
-
-        <EssentialLink
-          v-for="link in linksList"
-          :key="link.title"
-          v-bind="link"
-        />
-      </q-list>
-    </q-drawer>
 
     <q-page-container>
       <router-view />
     </q-page-container>
 
-    <LoginDialog :visible="isLoginDialogOpen"/>
+    <q-dialog v-model="alert" size="large">
+      <q-card style="width: 300px">
+        <q-card-section>
+          <div class="text-h6">Edit</div>
+        </q-card-section>
+
+        <q-card-section class="q-pt-none">
+          <div class="column">
+            <q-input v-model="password" type="password" label="Password" />
+            <q-btn
+              flat
+              color="primary"
+              label="Authenticate"
+              @click="authenticated = password === 'password'"
+            />
+          </div>
+          <div v-if="!authenticated">
+            <div v-for="metric in localMetrics" :key="metric.id">
+            <q-input v-model.number="metric.value" :label="metric.name" />
+            </div>
+          </div>
+
+        </q-card-section>
+
+        <q-card-actions align="right">
+          <q-btn flat label="Submit" color="primary" @click="saveMetrics" v-close-popup />
+        </q-card-actions>
+      </q-card>
+    </q-dialog>
   </q-layout>
 </template>
 
-<script setup lang="ts">
-import { ref } from 'vue'
-import EssentialLink, { EssentialLinkProps } from 'components/EssentialLink.vue'
-import LoginDialog from 'components/LoginDialog.vue'
-
-defineOptions({
-  name: 'MainLayout'
-})
-
-const isLoginDialogOpen = ref(false)
-const linksList: EssentialLinkProps[] = [
-  {
-    title: 'Docs',
-    caption: 'quasar.dev',
-    icon: 'school',
-    link: 'https://quasar.dev'
-  },
-  {
-    title: 'Github',
-    caption: 'github.com/quasarframework',
-    icon: 'code',
-    link: 'https://github.com/quasarframework'
-  },
-  {
-    title: 'Discord Chat Channel',
-    caption: 'chat.quasar.dev',
-    icon: 'chat',
-    link: 'https://chat.quasar.dev'
-  },
-  {
-    title: 'Forum',
-    caption: 'forum.quasar.dev',
-    icon: 'record_voice_over',
-    link: 'https://forum.quasar.dev'
-  },
-  {
-    title: 'Twitter',
-    caption: '@quasarframework',
-    icon: 'rss_feed',
-    link: 'https://twitter.quasar.dev'
-  },
-  {
-    title: 'Facebook',
-    caption: '@QuasarFramework',
-    icon: 'public',
-    link: 'https://facebook.quasar.dev'
-  },
-  {
-    title: 'Quasar Awesome',
-    caption: 'Community Quasar projects',
-    icon: 'favorite',
-    link: 'https://awesome.quasar.dev'
-  }
-]
-
-const leftDrawerOpen = ref(false)
-
-function toggleLeftDrawer () {
-  leftDrawerOpen.value = !leftDrawerOpen.value
+<style scoped lang="scss">
+.transparent-header {
+  background-color: transparent; /* Keep the header transparent */
+  position: absolute; /* Float above the content */
+  top: 0;
+  width: 100%;
+  z-index: 1000; /* Ensure it stays on top */
 }
-</script>
+
+</style>
