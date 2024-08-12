@@ -195,7 +195,7 @@ export default configure((/* ctx */) => {
       builder: {
         // https://www.electron.build/configuration/configuration
 
-        appId: 'abel-tracker'
+        appId: 'tallies'
       }
     },
 

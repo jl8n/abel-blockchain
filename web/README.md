@@ -1,6 +1,6 @@
-# Abel Tracker (abel-tracker)
+# Tallies
 
-Track Abel stats
+Track things
 
 ## Install the dependencies
 ```bash

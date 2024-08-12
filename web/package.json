@@ -1,8 +1,7 @@
 {
-  "name": "abel-tracker",
+  "name": "tallies",
   "version": "0.0.1",
-  "description": "Track Abel stats",
-  "productName": "Abel Tracker",
+  "description": "Tally things",
   "author": "Josh Layton <josh.l8n@gmail.com>",
   "type": "module",
   "private": true,
