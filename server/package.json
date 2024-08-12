@@ -1,7 +1,7 @@
 {
     "name": "server",
     "version": "0.0.1",
-    "description": "Blockchain Tracker API",
+    "description": "Tallies API",
     "main": "index.js",
     "type": "module",
     "license": "GPL-3.0-only",

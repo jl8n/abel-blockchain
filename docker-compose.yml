@@ -3,8 +3,8 @@ services:
     build:
       context: .
       dockerfile: web/Dockerfile.web
-    image: abeltracker-web:latest
-    container_name: web_container
+    image: tallies-web:latest
+    container_name: tallies-web
     ports:
       - 80:80
     depends_on:
@@ -14,7 +14,7 @@ services:
     build:
       context: .
       dockerfile: server/Dockerfile.server
-    image: abeltracker-server:latest
-    container_name: server_container
+    image: tallies-server:latest
+    container_name: tallies-server
     ports:
       - 3000:3000
