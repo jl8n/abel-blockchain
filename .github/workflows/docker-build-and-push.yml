@@ -54,7 +54,7 @@ jobs:
       - name: Build and push server image
         run: |
           docker build \
-            --build-arg PG_HOST=${{ secrets.SERVER_URL }} \
+            --build-arg SERVER_URL=${{ secrets.SERVER_URL }} \
             --build-arg PG_HOST=${{ secrets.PG_HOST }} \
             --build-arg PG_PORT=${{ secrets.PG_PORT }} \
             --build-arg PG_USER=${{ secrets.PG_USER }} \

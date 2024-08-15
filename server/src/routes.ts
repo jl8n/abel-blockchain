@@ -5,6 +5,7 @@ async function routes(fastify: FastifyInstance) {
 
   fastify.get('/api/data', async (_, reply) => {
     try {
+      console.log('Fetching data from database...');
       const { rows: [mark] } = await fastify.pg.query('SELECT * FROM mark');
       const { rows: metrics } = await fastify.pg.query('SELECT * FROM metrics');
       
@@ -14,6 +15,8 @@ async function routes(fastify: FastifyInstance) {
         lastname: mark.lastname,
         metrics: metrics
       };
+
+      console.log('Data fetched successfully:', response);
       
       reply.send(response);
     } catch (err) {

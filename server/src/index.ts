@@ -14,6 +14,8 @@ fastify.register(fastifyPostgres, {
 });
 fastify.register(routes);
 
+console.log(config.postgres.connectionString);
+
 
 const start = async () => {
   try {
