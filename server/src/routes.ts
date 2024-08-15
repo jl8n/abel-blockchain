@@ -6,14 +6,12 @@ async function routes(fastify: FastifyInstance) {
 
   fastify.get('/api/data', async (_, reply) => {
     try {
-      const data = await fs.readFile('mark.json', 'utf8');
-      const jsonData = JSON.parse(data);
-
-      reply.send(jsonData);
-  } catch (err) {
-    return reply.code(500).send({ error: 'Unable to read JSON file' });
-  }
-    //return { message: 'Hello World' };
+      const { rows: metrics } = await fastify.pg.query('SELECT * FROM metrics');
+      reply.send(metrics);
+    } catch (err) {
+      console.error('Error fetching metrics:', err);
+      return reply.code(500).send({ error: 'Unable to fetch data from database' });
+    }
   });
 
   fastify.post('/api/auth', async (request) => {
@@ -31,6 +29,7 @@ async function routes(fastify: FastifyInstance) {
       }
 
       // Read the current data
+      // TODO: use postgres instead of reading from file
       const data = await fs.readFile('mark.json', 'utf8');
       const jsonData = JSON.parse(data);
 
@@ -38,6 +37,7 @@ async function routes(fastify: FastifyInstance) {
       jsonData.metrics = newMetrics;
 
       // Write the updated data back to the file
+            // TODO: use postgres instead of writing to file
       await fs.writeFile('mark.json', JSON.stringify(jsonData, null, 2));
 
       reply.send({ message: 'Metrics updated successfully', updatedMetrics: newMetrics });

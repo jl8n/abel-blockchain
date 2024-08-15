@@ -29,13 +29,6 @@ COPY package.json ./
 # Copy /server package.json
 COPY server/package.json ./server/
 
-# Use local mark.json if it exists, otherwise use the GitHub secret
-ARG MARK_JSON_CONTENT
-COPY server/mark.json ./server/mark.json
-RUN if [ ! -f ./server/mark.json ]; then \
-      echo "$MARK_JSON_CONTENT" > ./server/mark.json; \
-    fi
-
 # Install only production dependencies
 RUN yarn install --production --frozen-lockfile && \
     yarn cache clean
