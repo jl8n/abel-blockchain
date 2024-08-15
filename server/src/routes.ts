@@ -28,21 +28,29 @@ async function routes(fastify: FastifyInstance) {
         return reply.code(400).send({ error: 'Invalid input: expected an array of metrics' });
       }
 
-      // Read the current data
-      // TODO: use postgres instead of reading from file
-      const data = await fs.readFile('mark.json', 'utf8');
-      const jsonData = JSON.parse(data);
+    // Delete existing metrics and insert new ones
+    const values = newMetrics
+      .map((metric, index) => `($${index * 3 + 1}, $${index * 3 + 2}, $${index * 3 + 3})`)
+      .join(', ');
 
-      // Replace the entire metrics array
-      jsonData.metrics = newMetrics;
+    const queryText = `
+      BEGIN;
+      DELETE FROM metrics;
+      INSERT INTO metrics (field1, field2, field3) VALUES ${values};
+      COMMIT;
+    `;
 
-      // Write the updated data back to the file
-            // TODO: use postgres instead of writing to file
-      await fs.writeFile('mark.json', JSON.stringify(jsonData, null, 2));
+    const queryParams = newMetrics.flatMap(metric => [metric.id, metric.name, metric.value]);
 
-      reply.send({ message: 'Metrics updated successfully', updatedMetrics: newMetrics });
+    await fastify.pg.query(queryText, queryParams);
+
+    reply.send({ message: 'Metrics updated successfully', updatedMetrics: newMetrics });
     } catch (err) {
       console.error('Error updating metrics:', err);
+
+      // Rollback transaction in case of an error
+      await fastify.pg.query('ROLLBACK');
+
       return reply.code(500).send({ error: 'Unable to update metrics' });
     }
   });

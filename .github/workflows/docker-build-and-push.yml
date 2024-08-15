@@ -53,5 +53,12 @@ jobs:
 
       - name: Build and push server image
         run: |
-          docker build -t ghcr.io/${{ github.repository_owner }}/tallies-server:latest -f server/Dockerfile.server .
+          docker build \
+            --build-arg PG_HOST=${{ secrets.PG_HOST }} \
+            --build-arg PG_PORT=${{ secrets.PG_PORT }} \
+            --build-arg PG_USER=${{ secrets.PG_USER }} \
+            --build-arg PG_PASSWORD=${{ secrets.PG_PASSWORD }} \
+            --build-arg PG_DB=${{ secrets.PG_DB }} \
+            -t ghcr.io/${{ github.repository_owner }}/tallies-server:latest \
+            -f server/Dockerfile.server .
           docker push ghcr.io/${{ github.repository_owner }}/tallies-server:latest
