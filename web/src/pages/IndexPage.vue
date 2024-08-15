@@ -3,6 +3,9 @@ import ExampleComponent from 'components/ExampleComponent.vue'
 import { ref, onMounted } from 'vue'
 import { useUserStore } from 'stores/userStore'
 
+// temporary
+console.log('server url: ', process.env.SERVER_URL)
+
 const userStore = useUserStore()
 
 interface Response {
