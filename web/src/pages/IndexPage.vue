@@ -20,10 +20,10 @@ const data = ref<Response>({
 })
 
 const colors: string[] = [
-  '#1db954', // Spotify green
-  '#1e90ff', // Dodger blue
-  '#ff4757', // Radical red
-  '#ffa502' // Bright yellow
+  '#1db954',
+  '#1e90ff',
+  '#ff4757',
+  '#ffa502'
 ]
 
 defineOptions({
@@ -31,7 +31,7 @@ defineOptions({
 })
 
 async function fetchData () {
-  const res = await fetch('http://localhost:3000/api/data')
+  const res = await fetch(`${process.env.SERVER_URL}/api/data`)
   if (!res.ok) {
     throw new Error('Network response was not ok')
   }
