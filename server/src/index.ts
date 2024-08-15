@@ -8,10 +8,10 @@ const fastify = Fastify({
   logger: true
 });
 
+fastify.register(cors, config.cors);
 fastify.register(fastifyPostgres, {
   connectionString: config.postgres.connectionString,
 });
-fastify.register(cors, config.cors);
 fastify.register(routes);
 
 

@@ -12,11 +12,7 @@ export const config = {
     connectionString: `postgres://${PG_USER}:${PG_PASSWORD}@${PG_HOST}/${PG_DB}`,
   },
   cors: {
-    origin: [
-      'http://localhost:3000', // Localhost
-      `http://${PG_HOST}`,  // Replace with your actual server IP
-      // Add any other origins that should be allowed
-    ],
+    origin: ['http://localhost:9000'],
     methods: ['GET', 'POST', 'PUT', 'DELETE'],
   },
 };

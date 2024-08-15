@@ -1,9 +1,12 @@
 import { defineStore } from 'pinia'
-import { Metric } from '../../../shared-types' // Adjust the import path as needed
+import type { Metric, GetResponse } from '../../../shared-types' // Adjust the import path as needed
 
 export const useUserStore = defineStore('user', {
   state: () => ({
-    // TODO: add title, other things in mark file
+    // TODO: add title, other things in db
+    title: '',
+    firstname: '',
+    lastname: '',
     metrics: [] as Metric[]
   }),
   actions: {
@@ -13,11 +16,11 @@ export const useUserStore = defineStore('user', {
 
     async fetchMetrics () {
       try {
-        const response = await fetch('http://localhost:3000/api/data')
+        const response = await fetch(`${process.env.SERVER_URL}/api/data`)
         if (!response.ok) {
           throw new Error('Failed to fetch metrics')
         }
-        const data = await response.json()
+        const data: GetResponse = await response.json()
         this.setMetrics(data.metrics)
         return true
       } catch (error) {
@@ -28,7 +31,7 @@ export const useUserStore = defineStore('user', {
 
     async updateMetrics (updatedMetrics: Metric[]) {
       try {
-        const response = await fetch('http://localhost:3000/api/data', {
+        const response = await fetch(`${process.env.SERVER_URL}/api/data`, {
           method: 'PUT',
           headers: {
             'Content-Type': 'application/json'

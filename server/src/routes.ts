@@ -5,19 +5,30 @@ async function routes(fastify: FastifyInstance) {
 
   fastify.get('/api/data', async (_, reply) => {
     try {
+      const { rows: [mark] } = await fastify.pg.query('SELECT * FROM mark');
       const { rows: metrics } = await fastify.pg.query('SELECT * FROM metrics');
-      reply.send(metrics);
+      
+      const response = {
+        title: mark.title,
+        firstname: mark.firstname,
+        lastname: mark.lastname,
+        metrics: metrics
+      };
+      
+      reply.send(response);
     } catch (err) {
-      console.error('Error fetching metrics:', err);
+      console.error('Error fetching data:', err);
       return reply.code(500).send({ error: 'Unable to fetch data from database' });
     }
   });
+
 
   fastify.post('/api/auth', async (request) => {
     const { body } = request;
     return { received: body };
   });
 
+  
   fastify.put('/api/data', async (request, reply) => {
     try {
       const newMetrics = request.body as Metric[];
