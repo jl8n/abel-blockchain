@@ -52,7 +52,9 @@ export default configure((/* ctx */) => {
 
       // publicPath: '/',
       // analyze: true,
-      // env: {},
+      env: {
+        SERVER_URL: process.env.SERVER_URL
+      },
       // rawDefine: {}
       // ignorePublicFolder: true,
       // minify: false,
