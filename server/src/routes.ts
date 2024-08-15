@@ -1,5 +1,4 @@
 import type { FastifyInstance } from 'fastify';
-import fs from 'node:fs/promises';
 import type { Metric } from '../../shared-types';
 
 async function routes(fastify: FastifyInstance) {
